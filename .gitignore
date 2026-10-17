@@ -1,0 +1,13 @@
+# Maven - Files generated during build
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Log files
+*.log
+
+# Operating system
+.DS_Store
+Thumbs.db

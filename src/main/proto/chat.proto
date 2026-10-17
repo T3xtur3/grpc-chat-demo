@@ -1,0 +1,44 @@
+syntax = "proto3";
+package chat;
+option java_multiple_files = true;
+option java_package = "com.grpcchat.proto";
+option java_outer_classname = "ChatProto";
+
+service ChatService {
+  rpc GetOnlineUsers(OnlineUsersRequest) returns (OnlineUsersResponse);
+  rpc WatchNotifications(NotificationRequest) returns (stream Notification);
+  rpc UploadMessageBatch(stream ChatMessage) returns (BatchResponse);
+  rpc Chat(stream ChatMessage) returns (stream ChatMessage);
+}
+
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  JOIN = 1;
+  TEXT = 2;
+  LEAVE = 3;
+  SYSTEM = 4;
+}
+message ChatMessage {
+  string user_id = 1;
+  string username = 2;
+  string room_id = 3;
+  string content = 4;
+  int64 timestamp = 5; // Unix milliseconds
+  MessageType type = 6;
+}
+message OnlineUsersRequest { string room_id = 1; }
+message OnlineUsersResponse {
+  repeated string usernames = 1;
+  int32 total = 2;
+  string backend_id = 3;
+}
+message NotificationRequest { string room_id = 1; }
+message Notification {
+  string message = 1;
+  string room_id = 2;
+  int64 timestamp = 3; // Unix milliseconds
+}
+message BatchResponse {
+  int32 received_count = 1;
+  string status = 2;
+}
